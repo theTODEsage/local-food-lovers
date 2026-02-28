@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import CardComponent from "../Components/CardComponent";
 
-
 const AllReviews = () => {
   const [reviews, setReviews] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -17,10 +16,6 @@ const AllReviews = () => {
       });
   }, [search]);
 
-  const handleSearch = (e) => {
-    setSearch(e.target.value);
-  };
-
   return (
     <div className="min-h-screen bg-gray-50 py-14 px-4">
       <div className="max-w-7xl mx-auto">
@@ -35,7 +30,32 @@ const AllReviews = () => {
           <div className="w-16 h-1 bg-orange-400 rounded-full mx-auto mt-3"></div>
         </div>
 
-        
+        {/* Search Bar */}
+        <div className="flex justify-center mb-10">
+          <label className="input input-bordered flex items-center gap-2 w-full max-w-md">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="h-4 w-4 text-gray-400"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="2"
+                d="M21 21l-4.35-4.35M17 11A6 6 0 1 1 5 11a6 6 0 0 1 12 0z"
+              />
+            </svg>
+            <input
+              type="text"
+              placeholder="Search by food name..."
+              className="grow"
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+            />
+          </label>
+        </div>
 
         {/* Skeleton */}
         {loading && (
@@ -62,8 +82,15 @@ const AllReviews = () => {
           <div className="text-center py-20">
             <p className="text-5xl mb-4">🍜</p>
             <p className="text-gray-500 text-lg">
-              No reviews found for{" "}
-              <span className="font-semibold text-orange-400">"{search}"</span>
+              No reviews found{" "}
+              {search && (
+                <>
+                  for{" "}
+                  <span className="font-semibold text-orange-400">
+                    "{search}"
+                  </span>
+                </>
+              )}
             </p>
           </div>
         )}
