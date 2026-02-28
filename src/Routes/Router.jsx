@@ -7,6 +7,11 @@ import Login from "../Pages/Login";
 import Register from "../Pages/Register";
 import AddReview from "../Pages/AddReview";
 import PrivateRoute from "./PrivateRoute";
+import MyReviews from "../Pages/MyReviews";
+import ViewDetails from "../Pages/ViewDetails";
+import EditReview from "../Pages/EditReview";
+import NotFound from "../Pages/NotFound";
+import MyFavorites from "../Components/MyFavorites";
 
 const router = createBrowserRouter([
     {
@@ -24,6 +29,22 @@ const router = createBrowserRouter([
             {
                 path: '/add-review',
                 element: <PrivateRoute><AddReview/></PrivateRoute>
+            },
+            {
+                path: '/my-reviews',
+                element: <PrivateRoute><MyReviews/></PrivateRoute>
+            },
+            {
+                path:"/reviews/:id",
+                element: <ViewDetails/>
+            },
+            {
+                path:"/edit-review/:id",
+                element: <PrivateRoute><EditReview/></PrivateRoute>
+            },
+            {
+                path: '/my-favorites',
+                element: <PrivateRoute><MyFavorites/></PrivateRoute>
             }
         ]
     },
@@ -40,6 +61,10 @@ const router = createBrowserRouter([
                 element: <Register/>
             }
         ]
+    },
+    {
+        path: '*',
+        element: <NotFound/>
     }
 ])
 

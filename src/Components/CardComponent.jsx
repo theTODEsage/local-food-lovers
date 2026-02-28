@@ -1,4 +1,7 @@
+import { use } from "react";
 import { Link } from "react-router";
+import AuthContext from "../Context/AuthContext";
+import toast from "react-hot-toast";
 
 const CardComponent = ({ card }) => {
   const {
@@ -10,20 +13,67 @@ const CardComponent = ({ card }) => {
     reviewerName,
     rating,
   } = card;
+  const { user } = use(AuthContext);
+
+  const handleFavorite = () => {
+    if (!user) return toast.error("Please login to save favorites");
+
+    const favoriteData = {
+      reviewId: _id,
+      foodImage,
+      foodName,
+      restaurantName,
+      location,
+      reviewerName,
+      rating,
+      userEmail: user.email,
+    };
+
+    fetch("http://localhost:3000/favorites", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(favoriteData),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.insertedId) toast.success("Added to favorites!");
+        else toast.error("Already in your favorites!");
+      })
+      .catch(() => toast.error("Something went wrong."));
+  };
 
   return (
     <div className="card bg-base-100 shadow-md hover:shadow-xl transition-shadow duration-300 overflow-hidden h-full">
-      {/* Food Image */}
-      <figure className="h-48 overflow-hidden">
+      {/* Food Image + Heart Button */}
+      <figure className="h-48 overflow-hidden relative">
         <img
           src={foodImage}
           alt={foodName}
           className="w-full h-full object-cover hover:scale-105 transition-transform duration-500"
         />
+        <button
+          onClick={handleFavorite}
+          className="absolute top-3 right-3 btn btn-circle btn-sm bg-white/80 hover:bg-white border-none shadow"
+          title="Add to favorites"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            className="w-4 h-4 text-red-500"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+            strokeWidth="2"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
+            />
+          </svg>
+        </button>
       </figure>
 
       <div className="card-body p-4 flex flex-col gap-2">
-        {/* Food Name */}
         <h2 className="card-title text-base font-bold text-gray-800">
           {foodName}
         </h2>
@@ -50,7 +100,7 @@ const CardComponent = ({ card }) => {
           <span className="text-xs text-gray-500 ml-1">({rating}/5)</span>
         </div>
 
-        {/* Restaurant Name */}
+        {/* Restaurant */}
         <div className="flex items-center gap-1.5 text-sm text-gray-600">
           <svg
             xmlns="http://www.w3.org/2000/svg"
