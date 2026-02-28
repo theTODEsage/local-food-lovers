@@ -26,6 +26,9 @@ export default function Navbar() {
       <li>
         <NavLink to="/all-reviews">All Reviews</NavLink>
       </li>
+      <li>
+        <NavLink to="/blogs">Blogs</NavLink>
+      </li>
     </>
   );
 
